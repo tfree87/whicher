@@ -51,8 +51,7 @@
 Store it into `whicher-cmd-list'.
 Use `whicher-check' to check this list."
   (let ((program (car (split-string cmd-string))))
-    (cl-pushnew program whicher-cmd-list
-                :test #'string=))
+    (push program whicher-cmd-list))
   cmd-string)
 
 (defun whicher--progname (p)
