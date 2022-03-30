@@ -45,6 +45,8 @@
 
 (defvar whicher-cmd-list nil)
 
+(defvar whicher-report-new-buffer nil)
+
 ;;;###autoload
 (defun whicher (cmd-string)
   "Extract the required program from CMD-STRING.
@@ -72,15 +74,30 @@ Use `whicher-check' to check this list."
            whicher-cmd-list
            :initial-value 0))
          (fmt-expr (format "%% %ds: %%s" max-length)))
-    (message
-     "Required programs:\n%s"
-     (mapconcat
-      (lambda (p)
-        (format fmt-expr
-                (whicher--progname p)
-                (whicher--progpath p)))
-      whicher-cmd-list
-      "\n"))))
+    (if (eq whicher-report-new-buffer t)
+        (progn (get-buffer-create "*Whicher Report*")
+               (set-buffer "*Whicher Report*")
+               (erase-buffer)
+               (let ((inhibit-read-only t))
+                 (insert
+                  (concat "Required programs:\n"
+                          (mapconcat
+                           (lambda (p)
+                             (format fmt-expr
+                                     (whicher--progname p)
+                                     (whicher--progpath p)))
+                           whicher-cmd-list
+                           "\n"))))
+               (switch-to-buffer "*Whicher Report*"))
+      (progn (message
+              "Required programs:\n%s"
+              (mapconcat
+               (lambda (p)
+                 (format fmt-expr
+                         (whicher--progname p)
+                         (whicher--progpath p)))
+               whicher-cmd-list
+               "\n"))))))
 
 (provide 'whicher)
 
