@@ -92,7 +92,7 @@ Use `whicher-check' to check this list."
                                      (whicher--progpath p)))
                            whicher-cmd-list
                            "\n"))))
-               (switch-to-buffer "*Whicher Report*"))
+               (switch-to-buffer-other-window "*Whicher Report*"))
       (progn (message
               "Required programs:\n%s"
               (mapconcat
